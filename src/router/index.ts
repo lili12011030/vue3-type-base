@@ -1,6 +1,6 @@
 import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'
 import Home from '../views/Home.vue'
-
+import Login from '../views/login/index.vue'
 export const constantRoutes: Array<RouteRecordRaw> = [
   {
     path: '/',
@@ -10,7 +10,7 @@ export const constantRoutes: Array<RouteRecordRaw> = [
   {
     path: '/login',
     name: 'login',
-    component: Home
+    component: Login
   },
   {
     path: '/about',
