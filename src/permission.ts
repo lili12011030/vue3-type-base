@@ -12,7 +12,7 @@ import { PermissionModule } from '@/store/modules/permission'
 
 NProgress.configure({ showSpinner: false })
 
-const whiteList = ['/login', '/auth-redirect']
+const whiteList = ['/login', '/register']
 
 // const getPageTitle = (key: string) => {
 //   const hasKey = i18n.te(`route.${key}`)
@@ -42,19 +42,19 @@ router.beforeEach(async(to: RouteLocationNormalized, _: RouteLocationNormalized,
           const roles = UserModule.roles
           // Generate accessible routes map based on role
           PermissionModule.GenerateRoutes(roles)
-        
+
           PermissionModule.dynamicRoutes.forEach((item:any):void => {
             router.addRoute(item);
           });
 
-         
+
           next({ ...to, replace: true })
         } catch (err) {
           // Remove token and redirect to login page
           UserModule.ResetToken()
 
 
-          // todo 
+          // todo
          // Message.error(err || 'Has Error')
 
           next(`/login?redirect=${to.path}`)

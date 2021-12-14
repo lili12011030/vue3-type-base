@@ -23,7 +23,9 @@ module.exports = {
       // change xxx-api/login => /mock-api/v1/login
       // detail: https://cli.vuejs.org/config/#devserver-proxy
       [process.env.VUE_APP_BASE_API]: {
-        target: `http://localhost:${mockServerPort}/mock-api/v1`,
+        // target: `http://localhost:${mockServerPort}/mock-api/v1`,
+        target: `http://127.0.0.1:7001/`,
+        logLevel: 'debug',
         changeOrigin: true, // needed for virtual hosted sites
         ws: true, // proxy websockets
         pathRewrite: {
@@ -64,7 +66,7 @@ module.exports = {
     // replace with another progress output plugin to solve the this bug:
     // https://github.com/vuejs/vue-cli/issues/4557
 
-    
+
     // config.plugin('simple-progress-webpack-plugin')
     //   .use(require.resolve('simple-progress-webpack-plugin'), [{
     //     format: 'compact'
