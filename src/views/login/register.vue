@@ -40,7 +40,9 @@
 
 <script lang="ts" setup>
 import { register } from '@/api/users'
-import {reactive, ref} from "vue";
+import {reactive, ref, inject} from "vue";
+import {ElForm, ElMessageBox, ElMessage} from "element-plus";
+import {useRouter} from "vue-router";
 
 const form = reactive({
   email:"316783812@qq.com",
@@ -65,7 +67,7 @@ const rules = reactive({
   ],
   repeatPasswd:[
     { required:true, message:"请再次输入密码" },
-    { validator:(rule,value,callback)=>{
+    { validator: (rule:any,value:string,callback:(e? : Error|string) => void)=>{
         if(value!== form.passwd){
           callback(new Error('两次密码不一致'))
         }
@@ -73,10 +75,10 @@ const rules = reactive({
       }}
   ],
 })
-const registerForm = ref(null)
-
+const registerForm = ref<InstanceType<typeof ElForm>>()
+const router  = useRouter()
 const handleRegister = function (){
-  registerForm.value.validate( async valid=>{
+  registerForm.value?.validate( async valid =>{
     if(valid){
       let obj = {
         email:form.email,
@@ -85,24 +87,19 @@ const handleRegister = function (){
         captcha:form.captcha,
       }
 
-      let ret = await register(obj)
-      console.log(ret)
-      if(ret.code==0){
-
-        // this.$alert('注册成功','成功',{
-        //   confirmButtonText:"去登录",
-        //   callback:()=>{
-        //     this.$router.push("/login")
-        //   }
-        // })
-
+      let ret:any = await register(obj)
+      if(ret.code === 0){
+        await ElMessageBox.alert('注册成功', '成功', {
+          confirmButtonText: "去登录",
+          callback: () => {
+            router.push("/login")
+          }
+        })
+      } else{
+        ElMessage.error(ret.message)
       }
-    // else{
-    //     // this.$message.error(ret.message)
-    //   }
-    }else{
-      console.log('校验失败')
     }
+
   })
 }
 
